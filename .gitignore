@@ -1,0 +1,16 @@
+# Compiled files
+*.o
+*.obj
+*.exe
+*.out
+
+# Binaries
+mini-shell
+myshell
+
+# Makefile intermediate files
+*.d
+
+# IDE / Editor folders
+*.vscode/
+*.idea/
