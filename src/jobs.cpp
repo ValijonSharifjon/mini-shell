@@ -1,8 +1,10 @@
 #include "jobs.h"
-#include <iostream>
-#include <algorithm>
-#include <sys/wait.h>
+
 #include <signal.h>
+#include <sys/wait.h>
+
+#include <algorithm>
+#include <iostream>
 
 std::vector<Job> job_list;
 pid_t foreground_pid = -1;
@@ -27,20 +29,23 @@ Job* find_job(int job_id) {
 
 void clean_jobs() {
     job_list.erase(
-        std::remove_if(job_list.begin(), job_list.end(), 
-            [](const Job& j) { return j.state == Job::DONE; }),
-        job_list.end()
-    );
+        std::remove_if(job_list.begin(), job_list.end(),
+                       [](const Job& j) { return j.state == Job::DONE; }),
+        job_list.end());
 }
 
 void cmd_jobs() {
     for (auto& job : job_list) {
         std::string state_str;
-        if (job.state == Job::RUNNING) state_str = "Running";
-        else if (job.state == Job::STOPPED) state_str = "Stopped";
-        else state_str = "Done";
+        if (job.state == Job::RUNNING)
+            state_str = "Running";
+        else if (job.state == Job::STOPPED)
+            state_str = "Stopped";
+        else
+            state_str = "Done";
 
-        std::cout << "[" << job.job_id << "]  " << state_str << "    " << job.command << "\n";
+        std::cout << "[" << job.job_id << "]  " << state_str << "    "
+                  << job.command << "\n";
     }
 }
 

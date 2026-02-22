@@ -1,7 +1,8 @@
 #include "parser.h"
-#include <sstream>
-#include <cstring>
+
 #include <cstdlib>
+#include <cstring>
+#include <sstream>
 
 std::vector<Command> parse_pipeline(const std::string& line) {
     std::vector<Command> commands;
@@ -16,7 +17,7 @@ std::vector<Command> parse_pipeline(const std::string& line) {
         while (seg_ss >> token) {
             cmd.args.push_back(strdup(token.c_str()));
         }
-        
+
         if (!cmd.args.empty()) {
             commands.push_back(cmd);
         }

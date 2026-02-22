@@ -1,19 +1,20 @@
 #include <iostream>
 #include <sstream>
-#include "parser.h"
+
 #include "executor.h"
-#include "signals.h"
 #include "jobs.h"
+#include "parser.h"
+#include "signals.h"
 
 int main() {
     setup_signals();
 
     while (true) {
-        std::cout<<"myshell>> ";
+        std::cout << "myshell>> ";
         std::string line;
 
         if (!std::getline(std::cin, line)) {
-            std::cout<< "\nexit\n";
+            std::cout << "\nexit\n";
             break;
         }
 
@@ -31,7 +32,7 @@ int main() {
         } else {
             ParsedLine parsed = parse_line(line);
             if (parsed.args.empty()) continue;
-            
+
             execute_command(parsed, line);
 
             for (char* arg : parsed.args) {
@@ -39,6 +40,6 @@ int main() {
             }
         }
     }
-    
+
     return 0;
 }

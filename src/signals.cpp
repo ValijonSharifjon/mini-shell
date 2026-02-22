@@ -1,8 +1,11 @@
 #include "signals.h"
-#include "jobs.h"
-#include <iostream>
-#include <sys/wait.h>
+
 #include <signal.h>
+#include <sys/wait.h>
+
+#include <iostream>
+
+#include "jobs.h"
 
 void sigint_handler(int sig) {
     (void)sig;
@@ -11,7 +14,7 @@ void sigint_handler(int sig) {
         foreground_pid = -1;
     }
 
-    std::cout<<"\nmyshell>>";
+    std::cout << "\nmyshell>>";
     std::cout.flush();
 }
 
@@ -32,11 +35,12 @@ void sigchld_handler(int sig) {
         for (auto& job : job_list) {
             if (job.pid == pid) {
                 job.state = Job::DONE;
-                std::cout << "\n[" << job.job_id << "]+ Done    " << job.command << "\n";
+                std::cout << "\n[" << job.job_id << "]+ Done    " << job.command
+                          << "\n";
             }
         }
     }
-    clean_jobs(); 
+    clean_jobs();
 }
 
 void setup_signals() {
