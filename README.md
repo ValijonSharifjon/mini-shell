@@ -103,9 +103,11 @@ myshell>> bg %1            # resume in background after Ctrl+Z
 | `Ctrl+Z` | Suspend foreground process |
 | `Ctrl+\` | Ignored |
 
-## Clean build
+## Make commands
 
-```bash
-make clean
-make
-```
+| Command | Description |
+|---------|-------------|
+| `make` | Build the project |
+| `make test` | Run tests |
+| `make format` | Format code |
+| `make clean` | Remove binary |
