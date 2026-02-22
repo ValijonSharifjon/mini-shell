@@ -1,11 +1,14 @@
 #include "executor.h"
-#include "jobs.h"
-#include "builtins.h"
-#include <iostream>
-#include <unistd.h>
-#include <sys/wait.h>
+
 #include <fcntl.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 #include <cstring>
+#include <iostream>
+
+#include "builtins.h"
+#include "jobs.h"
 
 static void execute_single(const std::vector<char*>& args) {
     pid_t pid = fork();
@@ -76,7 +79,8 @@ void execute_pipeline(std::vector<Command>& commands) {
 void execute_command(ParsedLine& parsed, const std::string& line) {
     if (handle_builtin(parsed.args)) return;
 
-    bool redirect_out = false, redirect_in = false, redirect_err = false, err_to_out = false;
+    bool redirect_out = false, redirect_in = false, redirect_err = false,
+         err_to_out = false;
     std::string out_file, in_file, err_file;
     std::vector<char*> clean_args;
 
@@ -104,19 +108,28 @@ void execute_command(ParsedLine& parsed, const std::string& line) {
     if (pid == 0) {
         if (redirect_in) {
             int fd = open(in_file.c_str(), O_RDONLY);
-            if (fd < 0) { perror("open input"); exit(1); }
+            if (fd < 0) {
+                perror("open input");
+                exit(1);
+            }
             dup2(fd, STDIN_FILENO);
             close(fd);
         }
         if (redirect_out) {
             int fd = open(out_file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd < 0) { perror("open output"); exit(1); }
+            if (fd < 0) {
+                perror("open output");
+                exit(1);
+            }
             dup2(fd, STDOUT_FILENO);
             close(fd);
         }
         if (redirect_err) {
             int fd = open(err_file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd < 0) { perror("open error"); exit(1); }
+            if (fd < 0) {
+                perror("open error");
+                exit(1);
+            }
             dup2(fd, STDERR_FILENO);
             close(fd);
         }
@@ -137,7 +150,8 @@ void execute_command(ParsedLine& parsed, const std::string& line) {
 
             if (WIFSTOPPED(status)) {
                 job_list.back().state = Job::STOPPED;
-                std::cout << "\n[" << job_list.back().job_id << "]+ Stopped    " << line << "\n";
+                std::cout << "\n[" << job_list.back().job_id << "]+ Stopped    "
+                          << line << "\n";
             } else {
                 job_list.back().state = Job::DONE;
                 clean_jobs();
